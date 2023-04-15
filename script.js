@@ -1,127 +1,47 @@
-function generate_year_range(start, end) {
-    var years = "";
-    for (var year = start; year <= end; year++) {
-        years += "<option value='" + year + "'>" + year + "</option>";
+const daysTag = document.querySelector(".days"),
+currentDate = document.querySelector(".current-date"),
+prevNextIcon = document.querySelectorAll(".icons span");
+// getting new date, current year and month
+let date = new Date(),
+currYear = date.getFullYear(),
+currMonth = date.getMonth();
+// storing full name of all months in array
+const months = ["January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December"];
+const renderCalendar = () => {
+    let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), // getting first day of month
+    lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), // getting last date of month
+    lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(), // getting last day of month
+    lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); // getting last date of previous month
+    let liTag = "";
+    for (let i = firstDayofMonth; i > 0; i--) { // creating li of previous month last days
+        liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
     }
-    return years;
+    for (let i = 1; i <= lastDateofMonth; i++) { // creating li of all days of current month
+        // adding active class to li if the current day, month, and year matched
+        let isToday = i === date.getDate() && currMonth === new Date().getMonth() 
+                     && currYear === new Date().getFullYear() ? "active" : "";
+        liTag += `<li class="${isToday}">${i}</li>`;
+    }
+    for (let i = lastDayofMonth; i < 6; i++) { // creating li of next month first days
+        liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
+    }
+    currentDate.innerText = `${months[currMonth]} ${currYear}`; // passing current mon and yr as currentDate text
+    daysTag.innerHTML = liTag;
 }
-
-today = new Date();
-currentMonth = today.getMonth();
-currentYear = today.getFullYear();
-selectYear = document.getElementById("year");
-selectMonth = document.getElementById("month");
-
-
-createYear = generate_year_range(1970, 2050);
-
-document.getElementById("year").innerHTML = createYear;
-
-var calendar = document.getElementById("calendar");
-var lang = calendar.getAttribute('data-lang');
-
-var months = "";
-var days = "";
-
-var monthDefault = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-var dayDefault = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-if (lang == "en") {
-    months = monthDefault;
-    days = dayDefault;
-}  else {
-    months = monthDefault;
-    days = dayDefault;
-}
-
-
-var $dataHead = "<tr>";
-for (dhead in days) {
-    $dataHead += "<th data-days='" + days[dhead] + "'>" + days[dhead] + "</th>";
-}
-$dataHead += "</tr>";
-
-//alert($dataHead);
-document.getElementById("thead-month").innerHTML = $dataHead;
-
-
-monthAndYear = document.getElementById("monthAndYear");
-showCalendar(currentMonth, currentYear);
-
-
-
-function next() {
-    currentYear = (currentMonth === 11) ? currentYear + 1 : currentYear;
-    currentMonth = (currentMonth + 1) % 12;
-    showCalendar(currentMonth, currentYear);
-}
-
-function previous() {
-    currentYear = (currentMonth === 0) ? currentYear - 1 : currentYear;
-    currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
-    showCalendar(currentMonth, currentYear);
-}
-
-function jump() {
-    currentYear = parseInt(selectYear.value);
-    currentMonth = parseInt(selectMonth.value);
-    showCalendar(currentMonth, currentYear);
-}
-
-function showCalendar(month, year) {
-
-    var firstDay = ( new Date( year, month ) ).getDay();
-
-    tbl = document.getElementById("calendar-body");
-
-    
-    tbl.innerHTML = "";
-
-    
-    monthAndYear.innerHTML = months[month] + " " + year;
-    selectYear.value = year;
-    selectMonth.value = month;
-
-    // creating all cells
-    var date = 1;
-    for ( var i = 0; i < 6; i++ ) {
-        
-        var row = document.createElement("tr");
-
-        
-        for ( var j = 0; j < 7; j++ ) {
-            if ( i === 0 && j < firstDay ) {
-                cell = document.createElement( "td" );
-                cellText = document.createTextNode("");
-                cell.appendChild(cellText);
-                row.appendChild(cell);
-            } else if (date > daysInMonth(month, year)) {
-                break;
-            } else {
-                cell = document.createElement("td");
-                cell.setAttribute("data-date", date);
-                cell.setAttribute("data-month", month + 1);
-                cell.setAttribute("data-year", year);
-                cell.setAttribute("data-month_name", months[month]);
-                cell.className = "date-picker";
-                cell.innerHTML = "<span>" + date + "</span>";
-
-                if ( date === today.getDate() && year === today.getFullYear() && month === today.getMonth() ) {
-                    cell.className = "date-picker selected";
-                }
-                row.appendChild(cell);
-                date++;
-            }
-
-
+renderCalendar();
+prevNextIcon.forEach(icon => { // getting prev and next icons
+    icon.addEventListener("click", () => { // adding click event on both icons
+        // if clicked icon is previous icon then decrement current month by 1 else increment it by 1
+        currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
+        if(currMonth < 0 || currMonth > 11) { // if current month is less than 0 or greater than 11
+            // creating a new date of current year & month and pass it as date value
+            date = new Date(currYear, currMonth, new Date().getDate());
+            currYear = date.getFullYear(); // updating current year with new date year
+            currMonth = date.getMonth(); // updating current month with new date month
+        } else {
+            date = new Date(); // pass the current date as date value
         }
-
-        tbl.appendChild(row);
-    }
-
-}
-
-function daysInMonth(iMonth, iYear) {
-    return 32 - new Date(iYear, iMonth, 32).getDate();
-}
+        renderCalendar(); // calling renderCalendar function
+    });
+});
