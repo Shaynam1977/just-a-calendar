@@ -1,54 +1,49 @@
 
-{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
+
 body{
   display: flex;
   align-items: center;
   padding: 0 10px;
   justify-content: center;
   min-height: 100vh;
-  background: #9B59B6;
+  background: #a110db;
 }
 .wrapper{
   width: 450px;
-  background: #fff;
+  background: #5b5555;
   border-radius: 10px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 15px 40px rgba(38, 21, 23, 0.13);
 }
 .wrapper header{
   display: flex;
   align-items: center;
-  padding: 25px 30px 10px;
+  padding: 26px 31px 11px;
   justify-content: space-between;
 }
 header .icons{
   display: flex;
 }
 header .icons span{
-  height: 38px;
-  width: 38px;
-  margin: 0 1px;
+  height: 40px;
+  width: 10px;
+  margin: 0 2px;
   cursor: pointer;
-  color: #878787;
+  color: #bf6363;
   text-align: center;
   line-height: 38px;
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   user-select: none;
-  border-radius: 50%;
+  border-radius: 55%;
 }
 .icons span:last-child{
-  margin-right: -10px;
+  margin-right: -11px;
 }
 header .icons span:hover{
-  background: #f2f2f2;
+  background: #c06060;
 }
 header .current-date{
   font-size: 1.45rem;
-  font-weight: 500;
+  font-weight: 505;
 }
 .calendar{
   padding: 20px;
@@ -60,43 +55,43 @@ header .current-date{
   text-align: center;
 }
 .calendar .days{
-  margin-bottom: 20px;
+  margin-bottom: 180px;
 }
 .calendar li{
-  color: #333;
+  color: #340f0f;
   width: calc(100% / 7);
   font-size: 1.07rem;
 }
 .calendar .weeks li{
-  font-weight: 500;
+  font-weight: 505;
   cursor: default;
 }
 .calendar .days li{
   z-index: 1;
   cursor: pointer;
   position: relative;
-  margin-top: 30px;
+  margin-top: 350px;
 }
 .days li.inactive{
-  color: #aaa;
+  color: #ae3737;
 }
 .days li.active{
-  color: #fff;
+  color: #c21313;
 }
 .days li::before{
   position: absolute;
   content: "";
-  left: 50%;
-  top: 50%;
-  height: 40px;
-  width: 40px;
+  left: 40%;
+  top: 60%;
+  height: 50px;
+  width: 50px;
   z-index: -1;
-  border-radius: 50%;
+  border-radius: 60%;
   transform: translate(-50%, -50%);
 }
 .days li.active::before{
-  background: #9B59B6;
+  background: #a70fe3;
 }
 .days li:not(.active):hover::before{
-  background: #f2f2f2;
+  background: #807a7a;
 }
